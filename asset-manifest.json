@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.js": "/soccer-scheduler/static/js/main.b7762d25.js",
+    "static/js/166.f41a5a46.js": "/soccer-scheduler/static/js/166.f41a5a46.js",
+    "static/media/Entypo.ttf": "/soccer-scheduler/static/media/Entypo.fc6169344c041cffcdae.ttf",
+    "static/media/tick.png": "/soccer-scheduler/static/media/tick.32cb45231ee117d499e2.png",
+    "static/media/arrow-up.png": "/soccer-scheduler/static/media/arrow-up.0b0d1af9a5b464b93fde.png",
+    "static/media/close.png": "/soccer-scheduler/static/media/close.b65df71afd6c8e422619.png",
+    "static/media/arrow-down.png": "/soccer-scheduler/static/media/arrow-down.772a5382a31866c9198e.png",
+    "favicon.ico": "/soccer-scheduler/favicon.ico",
+    "index.html": "/soccer-scheduler/index.html",
+    "favicon-32.png": "/soccer-scheduler/favicon-32.png",
+    "favicon-16.png": "/soccer-scheduler/favicon-16.png",
+    "manifest.json": "/soccer-scheduler/manifest.json",
+    "serve.json": "/soccer-scheduler/serve.json",
+    "main.b7762d25.js.map": "/soccer-scheduler/static/js/main.b7762d25.js.map",
+    "166.f41a5a46.js.map": "/soccer-scheduler/static/js/166.f41a5a46.js.map"
+  },
+  "entrypoints": [
+    "static/js/166.f41a5a46.js",
+    "static/js/main.b7762d25.js"
+  ]
+}
