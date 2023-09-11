@@ -1,9 +1,10 @@
-import { View, StyleSheet, SafeAreaView, ScrollView, Text } from 'react-native';
+import { Button, View, StyleSheet, Text, useWindowDimensions } from 'react-native';
 import { useState, useEffect } from 'react'
 import Period from './Period';
-import PlayerPicker from './PlayerPicker';
-import Accordion from 'react-native-collapsible/Accordion';
-import {Entypo} from '@expo/vector-icons'
+import PlayerPicker, {playerArray} from './PlayerPicker';
+import { TabView } from 'react-native-tab-view';
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+
 
 const styles = StyleSheet.create({
   container: {
@@ -31,6 +32,10 @@ const styles = StyleSheet.create({
   },
   seperator: {
     height: 12
+  },
+  timerContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
 
@@ -56,8 +61,8 @@ const fair_games = {
   9: [['i', 'b', 'e', 'a'], ['b', 'f', 'a', 'h'], ['g', 'c', 'f', 'd'], ['f', 'i', 'c', 'e'], ['d', 'a', 'h', 'b'], ['d', 'g', 'i', 'f'], ['e', 'h', 'i', 'c'], ['c', 'a', 'g', 'b'], ['h', 'e', 'd', 'g']],
   8: [['h', 'e', 'b', 'a'], ['c', 'f', 'g', 'a'], ['d', 'c', 'h', 'e'], ['f', 'a', 'b', 'c'], ['h', 'g', 'f', 'e'], ['d', 'a', 'f', 'h'], ['g', 'b', 'd', 'c'], ['b', 'e', 'd', 'g']],
   7: [['b', 'f', 'a', 'e'], ['g', 'b', 'a', 'f'], ['e', 'd', 'f', 'c'], ['c', 'a', 'g', 'b'], ['c', 'e', 'd', 'b'], ['a', 'f', 'd', 'g'], ['g', 'd', 'c', 'e']],
-  6: [['d', 'e', 'b', 'c'], ['a', 'b', 'f', 'c'], ['e', 'f', 'b', 'a'], ['b', 'c', 'e', 'd'], ['a', 'f', 'd', 'e'], ['d', 'c', 'a', 'f']],
-  5: [['a', 'd', 'b', 'e'], ['a', 'c', 'b', 'd'], ['d', 'e', 'a', 'c'], ['b', 'e', 'c', 'a'], ['b', 'c', 'e', 'd']]
+  6: [['d', 'e', 'b', 'c'], ['a', 'b', 'f', 'c'], ['e', 'f', 'b', 'a'], ['b', 'c', 'e', 'd'], ['a', 'f', 'd', 'e'], ['d', 'c', 'a', 'f'], ['d', 'e', 'b', 'c'], ['a', 'b', 'f', 'c'], ['e', 'f', 'b', 'a'], ['b', 'c', 'e', 'd'], ['a', 'f', 'd', 'e'], ['d', 'c', 'a', 'f']],
+  5: [['a', 'd', 'b', 'e'], ['a', 'c', 'b', 'd'], ['d', 'e', 'a', 'c'], ['b', 'e', 'c', 'a'], ['b', 'c', 'e', 'd'], ['a', 'd', 'b', 'e'], ['a', 'c', 'b', 'd'], ['d', 'e', 'a', 'c'], ['b', 'e', 'c', 'a'], ['b', 'c', 'e', 'd']]
 }
 
 const placeholder_names = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
@@ -142,13 +147,37 @@ function create_game_rotations(game, player_map) {
   return rotations
 }
 
+const PickPlayersRoute = () => (
+  <View style={{ flex: 1 }} />
+);
+
+const PeriodRoute = ({sections, index}) => (
+  sections[index-1].content
+);
+
 const Game = () => {
-  const [ players, setPlayers ] = useState([])
+  const [ players, setPlayers ] = useState(playerArray)
+  const totalSecondsPlayed = 2 * 25 * 60
+  const [timePerPeriod, setTimePerPeriod] = useState()
   //console.log(players)
 
-  const [ activeSections, setActiveSections ] = useState([]);
-
   const [sections, setSections] = useState([]);
+
+  const [index, setIndex] = useState(0);
+  const [routes, setRoutes] = useState([{key: "pick", title: "Pick Players"}]);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'pick':
+        return <PickPlayersRoute/>;
+      default:
+        return <PeriodRoute sections={sections} index={route.key}/>;
+    }
+  };
+
+  // const [renderScene, setRenderScene] = useState(() => {
+  //   return (FirstRoute())
+  // });
 
   function updatePlayers() {
     if(!players || players.length < 5)
@@ -165,48 +194,48 @@ const Game = () => {
       title: "Period " + period.id,
       content: <Period item={period}/>
     }));
-
+    
+    setTimePerPeriod(totalSecondsPlayed/rotations.length)
     setSections(s)
+    setRoutes(rotations.map((rotation) => Object.assign({key: rotation.id, title: rotation.id})))
   }
 
   useEffect(updatePlayers, [players])
 
-  function renderHeader(section, _, isActive) {
-    return (
-      <View style={styles.accordHeader}>
-        <Text style={styles.accordTitle}>{ section.title }</Text>
-        <Entypo name={ isActive ? 'chevron-up' : 'chevron-down' }
-              size={20} color="#bbb" />
-      </View>
-    );
-  }
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [key, setKey] = useState(0)
 
-  function renderContent(section, _, isActive) {
-    return (
-      <View style={styles.accordBody}>
-        {section.content}
-      </View>
-    );
-  }
+  const layout = useWindowDimensions();
 
   return (
     <View style={styles.container}>
       <PlayerPicker players={players} setPlayers={setPlayers}/>
-      <SafeAreaView style={styles.container}>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.container}>
-            <Accordion
-              align="bottom"
-              sections={sections}
-              activeSections={activeSections}
-              renderHeader={renderHeader}
-              renderContent={renderContent}
-              onChange={(sections) => setActiveSections(sections)}
-              sectionContainerStyle={styles.accordContainer}
-            />
-        </ScrollView>
-      </SafeAreaView>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+      />
+      <View style={styles.timerContainer}>
+        <CountdownCircleTimer
+          key={key}
+          isPlaying={isPlaying}
+          duration={timePerPeriod}
+          colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+          colorsTime={[timePerPeriod, (3*timePerPeriod)/4, timePerPeriod/2, 0]}
+          onComplete={() => ({shouldRepeat: false})}
+          updateInterval={1}
+      >
+        {({ remainingTime, color }) => (
+          <Text style={{ color, fontSize: 40 }}>
+            {Math.floor(remainingTime / 60)}:{("0" + remainingTime % 60).slice(-2)}
+          </Text>
+        )}
+      </CountdownCircleTimer>
+      <Button title="Start/Stop" onPress={() => setIsPlaying(prev => !prev)} />
+
+      <Button title="Reset" onPress={() => setKey(prevKey => prevKey + 1)} />
+    </View>
     </View>
     );
 };

@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker';
 
+export const playerArray = ["Brayden", "Brody", "Cameron", "Emerson", "Jackson", "Jett", "Otto", "Owen", "Ronan"];
+
 const PlayerPicker = ({players, setPlayers}) => {
 
     const [open, setOpen] = useState(false);
-    const playerArray = ["Otto", "Jackson", "Emerson", "Owen", "Brayden", "Brody", "Jett", "Cameron", "Ronan"];
 
     const playerItemMap = playerArray.map((player) => Object.assign({label: player, value: player}));
     const [items, setItems] = useState(playerItemMap);
