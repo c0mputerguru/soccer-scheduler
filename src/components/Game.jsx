@@ -1,4 +1,4 @@
-import { Button, View, StyleSheet, Text, useWindowDimensions } from 'react-native';
+import { TextInput, Modal, Pressable, Button, View, StyleSheet, Text, useWindowDimensions } from 'react-native';
 import { useState, useEffect } from 'react'
 import Period from './Period';
 import PlayerPicker, {playerArray} from './PlayerPicker';
@@ -36,26 +36,58 @@ const styles = StyleSheet.create({
   timerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 20
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
 });
 
-function shuffle(array) {
-  var currentIndex = array.length,  randomIndex;
+// function shuffle(array) {
+//   var currentIndex = array.length,  randomIndex;
 
-  // While there remain elements to shuffle.
-  while (currentIndex > 0) {
+//   // While there remain elements to shuffle.
+//   while (currentIndex > 0) {
 
-    // Pick a remaining element.
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
+//     // Pick a remaining element.
+//     randomIndex = Math.floor(Math.random() * currentIndex);
+//     currentIndex--;
 
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
-  }
+//     // And swap it with the current element.
+//     [array[currentIndex], array[randomIndex]] = [
+//       array[randomIndex], array[currentIndex]];
+//   }
 
-  return array;
-}
+//   return array;
+// }
 
 const fair_games = {
   9: [['i', 'b', 'e', 'a'], ['b', 'f', 'a', 'h'], ['g', 'c', 'f', 'd'], ['f', 'i', 'c', 'e'], ['d', 'a', 'h', 'b'], ['d', 'g', 'i', 'f'], ['e', 'h', 'i', 'c'], ['c', 'a', 'g', 'b'], ['h', 'e', 'd', 'g']],
@@ -196,6 +228,7 @@ const Game = () => {
     }));
     
     setTimePerPeriod(totalSecondsPlayed/rotations.length)
+    setManualTimerInput(totalSecondsPlayed/rotations.length)
     setSections(s)
     setRoutes(rotations.map((rotation) => Object.assign({key: rotation.id, title: rotation.id})))
   }
@@ -204,6 +237,17 @@ const Game = () => {
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [key, setKey] = useState(0)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [manualTimerInput, setManualTimerInput] = useState('');
+
+  function tryUpdateTimePerPeriod() {
+    if (typeof manualTimerInput != "string") return // we only process strings!  
+    if (isNaN(manualTimerInput) || // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+         isNaN(parseFloat(manualTimerInput)))
+      return
+
+    setTimePerPeriod(parseInt(manualTimerInput))
+  }
 
   const layout = useWindowDimensions();
 
@@ -217,21 +261,46 @@ const Game = () => {
         initialLayout={{ width: layout.width }}
       />
       <View style={styles.timerContainer}>
-        <CountdownCircleTimer
-          key={key}
-          isPlaying={isPlaying}
-          duration={timePerPeriod}
-          colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-          colorsTime={[timePerPeriod, (3*timePerPeriod)/4, timePerPeriod/2, 0]}
-          onComplete={() => ({shouldRepeat: false})}
-          updateInterval={1}
-      >
-        {({ remainingTime, color }) => (
-          <Text style={{ color, fontSize: 40 }}>
-            {Math.floor(remainingTime / 60)}:{("0" + remainingTime % 60).slice(-2)}
-          </Text>
-        )}
-      </CountdownCircleTimer>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Enter Timer In Seconds:</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setManualTimerInput}
+                value={manualTimerInput}
+                keyboardType="numeric"
+              />
+              <Button title="Submit" onPress={() => {
+                  setModalVisible(!modalVisible)
+                  tryUpdateTimePerPeriod()
+              }} />
+            </View>
+          </View>
+        </Modal>
+        <Pressable onLongPress={() => setModalVisible(!modalVisible)}>
+          <CountdownCircleTimer
+            key={key}
+            isPlaying={isPlaying}
+            duration={timePerPeriod}
+            colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+            colorsTime={[timePerPeriod, (3*timePerPeriod)/4, timePerPeriod/2, 0]}
+            onComplete={() => ({shouldRepeat: false})}
+            updateInterval={1}
+          >
+            {({ remainingTime, color }) => (
+              <Text style={{ color, fontSize: 40 }}>
+                {Math.floor(remainingTime / 60)}:{("0" + remainingTime % 60).slice(-2)}
+              </Text>
+            )}
+          </CountdownCircleTimer>
+      </Pressable>
       <Button title="Start/Stop" onPress={() => setIsPlaying(prev => !prev)} />
 
       <Button title="Reset" onPress={() => setKey(prevKey => prevKey + 1)} />
