@@ -216,6 +216,7 @@ const Game = () => {
       return;
 
     var shuffled_players = players //shuffle(players)
+    shuffled_players.sort()
     const player_map = Object.fromEntries(
       placeholder_names.map((key, index) => [key, shuffled_players[index]]),
     );
