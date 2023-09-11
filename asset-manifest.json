@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/soccer-scheduler/static/js/main.921bcbe5.js",
+    "main.js": "/soccer-scheduler/static/js/main.5110d954.js",
     "static/js/210.6e36b364.js": "/soccer-scheduler/static/js/210.6e36b364.js",
     "static/media/Entypo.ttf": "/soccer-scheduler/static/media/Entypo.fc6169344c041cffcdae.ttf",
     "static/media/tick.png": "/soccer-scheduler/static/media/tick.32cb45231ee117d499e2.png",
@@ -13,11 +13,11 @@
     "favicon-16.png": "/soccer-scheduler/favicon-16.png",
     "manifest.json": "/soccer-scheduler/manifest.json",
     "serve.json": "/soccer-scheduler/serve.json",
-    "main.921bcbe5.js.map": "/soccer-scheduler/static/js/main.921bcbe5.js.map",
+    "main.5110d954.js.map": "/soccer-scheduler/static/js/main.5110d954.js.map",
     "210.6e36b364.js.map": "/soccer-scheduler/static/js/210.6e36b364.js.map"
   },
   "entrypoints": [
     "static/js/210.6e36b364.js",
-    "static/js/main.921bcbe5.js"
+    "static/js/main.5110d954.js"
   ]
 }
