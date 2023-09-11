@@ -183,7 +183,7 @@ const Game = () => {
     if(!players || players.length < 5)
       return;
 
-    var shuffled_players = shuffle(players)
+    var shuffled_players = players //shuffle(players)
     const player_map = Object.fromEntries(
       placeholder_names.map((key, index) => [key, shuffled_players[index]]),
     );
