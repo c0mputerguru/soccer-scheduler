@@ -173,8 +173,9 @@ def find_game(num_players):
 games = {
     'nine_player_game': [['e', 'b', 'g', 'd'], ['f', 'c', 'i', 'h'], ['h', 'b', 'a', 'e'], ['g', 'f', 'a', 'd'], ['i', 'd', 'b', 'c'], ['a', 'e', 'f', 'h'], ['d', 'h', 'g', 'f'], ['a', 'i', 'b', 'c'], ['g', 'c', 'i', 'e']], #b and f don't play together
     'nine_player_d3plays_game': [['i', 'b', 'e', 'a'], ['b', 'f', 'a', 'h'], ['g', 'c', 'f', 'd'], ['f', 'i', 'c', 'e'], ['d', 'a', 'h', 'b'], ['d', 'g', 'i', 'f'], ['e', 'h', 'i', 'c'], ['c', 'a', 'g', 'b'], ['h', 'e', 'd', 'g']], # d plays 3 in a row
-    'eight_player_game': [['h', 'e', 'b', 'a'], ['c', 'f', 'g', 'a'], ['d', 'c', 'h', 'e'], ['f', 'a', 'b', 'c'], ['h', 'g', 'f', 'e'], ['d', 'a', 'f', 'h'], ['g', 'b', 'd', 'c'], ['b', 'e', 'd', 'g']], # c, d, f plays 3 in a row
-    'seven_player_game': [['b', 'f', 'a', 'e'], ['g', 'b', 'a', 'f'], ['e', 'd', 'f', 'c'], ['c', 'a', 'g', 'b'], ['c', 'e', 'd', 'b'], ['a', 'f', 'd', 'g'], ['g', 'd', 'c', 'e']], # c, d, f plays 3 in a row
+    'eight_player_game': [['d', 'g', 'e', 'f'], ['e', 'g', 'a', 'c'], ['f', 'b', 'h', 'd'], ['b', 'a', 'f', 'g'], ['h', 'e', 'c', 'd'], ['c', 'f', 'e', 'b'], ['a', 'h', 'b', 'g'], ['d', 'c', 'h', 'a']],
+    'seven_player_game': [['a', 'b', 'e', 'c'], ['b', 'g', 'd', 'a'], ['c', 'f', 'e', 'g'], ['f', 'e', 'b', 'a'], ['g', 'a', 'b', 'd'], ['e', 'd', 'c', 'f'], ['c', 'd', 'g', 'f']],
+    'six_player_game': [['c', 'a', 'e', 'f'], ['d', 'a', 'f', 'b'], ['e', 'b', 'd', 'c'], ['f', 'e', 'a', 'c'], ['b', 'f', 'a', 'd'], ['c', 'd', 'b', 'e']],
 }
 player_names = ["Otto", "Jackson", "Emerson", "Owen", "Brayden", "Brody", "Jett", "Cameron", "Ronan"]
 random.shuffle(player_names)
