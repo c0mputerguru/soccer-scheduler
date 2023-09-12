@@ -52,6 +52,19 @@ def mixed_play_score(game, players, print_info=False):
 
     return (score * 100) / (len(players) * (len(players) - 1))
 
+def is_max_2_play(game, players):
+    players_dict = {player: 0 for player in players}
+
+    for period in game:
+        for player in players_dict.keys():
+            if players_dict[player] >= 3:
+                return False
+            if player in period:
+                players_dict[player] += 1
+            else:
+                players_dict[player] = 0
+    return True
+
 
 def is_max_2_rest(game, players):
     players_dict = {player: 0 for player in players}
@@ -135,9 +148,8 @@ def print_game(game, player_map):
         prev_offense = current_offense
         prev_defense = current_defense
 
-def find_game():
-    players = placeholder_names[0:5]
-    num_players = len(players)
+def find_game(num_players):
+    players = placeholder_names[0:num_players]
     players_per_period = 4
     sessions = num_players
 
@@ -145,7 +157,7 @@ def find_game():
     count = 0
     for game in game_sequence(players, players_per_period):
         #print(game)
-        if(is_valid(game) and is_positions_fair(game, players) and is_max_2_rest(game, players)):
+        if(is_valid(game) and is_positions_fair(game, players) and is_max_2_rest(game, players) and is_max_2_play(game, players)):
             score = mixed_play_score(game, players)
             print(str(score) + ": " + str(game))
 
@@ -156,7 +168,8 @@ def find_game():
         #     start_time = end_time
 
 # Found Games
-nine_player_game = [['i', 'b', 'e', 'a'], ['b', 'f', 'a', 'h'], ['g', 'c', 'f', 'd'], ['f', 'i', 'c', 'e'], ['d', 'a', 'h', 'b'], ['d', 'g', 'i', 'f'], ['e', 'h', 'i', 'c'], ['c', 'a', 'g', 'b'], ['h', 'e', 'd', 'g']]
+nine_player_game = [['e', 'b', 'g', 'd'], ['f', 'c', 'i', 'h'], ['h', 'b', 'a', 'e'], ['g', 'f', 'a', 'd'], ['i', 'd', 'b', 'c'], ['a', 'e', 'f', 'h'], ['d', 'h', 'g', 'f'], ['a', 'i', 'b', 'c'], ['g', 'c', 'i', 'e']] #b and f don't play together
+nine_player_d3plays_game = [['i', 'b', 'e', 'a'], ['b', 'f', 'a', 'h'], ['g', 'c', 'f', 'd'], ['f', 'i', 'c', 'e'], ['d', 'a', 'h', 'b'], ['d', 'g', 'i', 'f'], ['e', 'h', 'i', 'c'], ['c', 'a', 'g', 'b'], ['h', 'e', 'd', 'g']] # d plays 3 in a row
 eight_player_game = [['h', 'e', 'b', 'a'], ['c', 'f', 'g', 'a'], ['d', 'c', 'h', 'e'], ['f', 'a', 'b', 'c'], ['h', 'g', 'f', 'e'], ['d', 'a', 'f', 'h'], ['g', 'b', 'd', 'c'], ['b', 'e', 'd', 'g']]
 seven_player_game = [['b', 'f', 'a', 'e'], ['g', 'b', 'a', 'f'], ['e', 'd', 'f', 'c'], ['c', 'a', 'g', 'b'], ['c', 'e', 'd', 'b'], ['a', 'f', 'd', 'g'], ['g', 'd', 'c', 'e']]
 
@@ -166,7 +179,5 @@ placeholder_names = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 
 player_map = {placeholder_names[i]: player_names[i] for i in range(len(placeholder_names))}
 
-# Idea to build a react (native?) app that you select which players are there, how long the game is, and it then give pages for each change as well as a timer that can be started/paused counts down.
-
 #print_game(seven_player_game, player_map)
-find_game()
+find_game(9)
