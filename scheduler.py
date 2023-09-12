@@ -1,6 +1,8 @@
 import itertools
 import random
 import time
+import sys
+import getopt
 
 def get_players_from_game(game):
     return sorted(list(set(itertools.chain.from_iterable(game))))
@@ -168,16 +170,27 @@ def find_game(num_players):
         #     start_time = end_time
 
 # Found Games
-nine_player_game = [['e', 'b', 'g', 'd'], ['f', 'c', 'i', 'h'], ['h', 'b', 'a', 'e'], ['g', 'f', 'a', 'd'], ['i', 'd', 'b', 'c'], ['a', 'e', 'f', 'h'], ['d', 'h', 'g', 'f'], ['a', 'i', 'b', 'c'], ['g', 'c', 'i', 'e']] #b and f don't play together
-nine_player_d3plays_game = [['i', 'b', 'e', 'a'], ['b', 'f', 'a', 'h'], ['g', 'c', 'f', 'd'], ['f', 'i', 'c', 'e'], ['d', 'a', 'h', 'b'], ['d', 'g', 'i', 'f'], ['e', 'h', 'i', 'c'], ['c', 'a', 'g', 'b'], ['h', 'e', 'd', 'g']] # d plays 3 in a row
-eight_player_game = [['h', 'e', 'b', 'a'], ['c', 'f', 'g', 'a'], ['d', 'c', 'h', 'e'], ['f', 'a', 'b', 'c'], ['h', 'g', 'f', 'e'], ['d', 'a', 'f', 'h'], ['g', 'b', 'd', 'c'], ['b', 'e', 'd', 'g']]
-seven_player_game = [['b', 'f', 'a', 'e'], ['g', 'b', 'a', 'f'], ['e', 'd', 'f', 'c'], ['c', 'a', 'g', 'b'], ['c', 'e', 'd', 'b'], ['a', 'f', 'd', 'g'], ['g', 'd', 'c', 'e']]
-
+games = {
+    'nine_player_game': [['e', 'b', 'g', 'd'], ['f', 'c', 'i', 'h'], ['h', 'b', 'a', 'e'], ['g', 'f', 'a', 'd'], ['i', 'd', 'b', 'c'], ['a', 'e', 'f', 'h'], ['d', 'h', 'g', 'f'], ['a', 'i', 'b', 'c'], ['g', 'c', 'i', 'e']], #b and f don't play together
+    'nine_player_d3plays_game': [['i', 'b', 'e', 'a'], ['b', 'f', 'a', 'h'], ['g', 'c', 'f', 'd'], ['f', 'i', 'c', 'e'], ['d', 'a', 'h', 'b'], ['d', 'g', 'i', 'f'], ['e', 'h', 'i', 'c'], ['c', 'a', 'g', 'b'], ['h', 'e', 'd', 'g']], # d plays 3 in a row
+    'eight_player_game': [['h', 'e', 'b', 'a'], ['c', 'f', 'g', 'a'], ['d', 'c', 'h', 'e'], ['f', 'a', 'b', 'c'], ['h', 'g', 'f', 'e'], ['d', 'a', 'f', 'h'], ['g', 'b', 'd', 'c'], ['b', 'e', 'd', 'g']],
+    'seven_player_game': [['b', 'f', 'a', 'e'], ['g', 'b', 'a', 'f'], ['e', 'd', 'f', 'c'], ['c', 'a', 'g', 'b'], ['c', 'e', 'd', 'b'], ['a', 'f', 'd', 'g'], ['g', 'd', 'c', 'e']],
+}
 player_names = ["Otto", "Jackson", "Emerson", "Owen", "Brayden", "Brody", "Jett", "Cameron", "Ronan"]
 random.shuffle(player_names)
 placeholder_names = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 
 player_map = {placeholder_names[i]: player_names[i] for i in range(len(placeholder_names))}
 
-#print_game(seven_player_game, player_map)
-find_game(9)
+def main(argv):
+    opts, args = getopt.getopt(argv,"p:f:",["print=","find="])
+    for opt, arg in opts:
+        if opt in ("-p", "--print"):
+            print_game(games[arg], player_map)
+            sys.exit()
+        if opt in ("-f", "--find"):
+            find_game(int(arg))
+            sys.exit()  
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
