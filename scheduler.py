@@ -90,9 +90,13 @@ def game_sequence(players, players_per_period):
 
 def print_game(game, player_map):
     game = [list(map(lambda x: player_map.get(x, x), i)) for i in game]
-    # players = get_players_from_game(game)
-    # score = mixed_play_score(game, players)
-    # print(str(score) + ": " + str(game))
+    players = get_players_from_game(game)
+    score = mixed_play_score(game, players)
+    print(str(score) + ": " + str(game))
+    print("Is Valid: " + str(is_valid(game)))
+    print("Is Positions Fair: " + str(is_positions_fair(game, players)))
+    print("Is Max 2 Rest: " + str(is_max_2_rest(game, players)))
+    print("Is Max 2 Play: " + str(is_max_2_play(game, players)))
     prev_offense = []
     prev_defense = []
     for period in game:
@@ -176,6 +180,7 @@ games = {
     'eight_player_game': [['d', 'g', 'e', 'f'], ['e', 'g', 'a', 'c'], ['f', 'b', 'h', 'd'], ['b', 'a', 'f', 'g'], ['h', 'e', 'c', 'd'], ['c', 'f', 'e', 'b'], ['a', 'h', 'b', 'g'], ['d', 'c', 'h', 'a']],
     'seven_player_game': [['a', 'b', 'e', 'c'], ['b', 'g', 'd', 'a'], ['c', 'f', 'e', 'g'], ['f', 'e', 'b', 'a'], ['g', 'a', 'b', 'd'], ['e', 'd', 'c', 'f'], ['c', 'd', 'g', 'f']],
     'six_player_game': [['c', 'a', 'e', 'f'], ['d', 'a', 'f', 'b'], ['e', 'b', 'd', 'c'], ['f', 'e', 'a', 'c'], ['b', 'f', 'a', 'd'], ['c', 'd', 'b', 'e']],
+    'five_player_game': [['a', 'b', 'c', 'd'], ['b', 'c', 'd', 'e'], ['c', 'd', 'e', 'a'], ['d', 'e', 'a', 'b'], ['e', 'a', 'b', 'c']],
 }
 player_names = ["Otto", "Jackson", "Emerson", "Owen", "Brayden", "Brody", "Jett", "Cameron", "Ronan"]
 random.shuffle(player_names)
