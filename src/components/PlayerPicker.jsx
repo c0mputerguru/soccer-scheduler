@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker';
 
-export const playerArray = ["Brayden", "Brody", "Cameron", "Emerson", "Jackson", "Jett", "Otto", "Owen", "Ronan"];
+export const playerArray = ["Brayden", "Cameron", "Emerson", "Jackson", "Jett", "Otto", "Anurag", "Ronan"];
 
 const PlayerPicker = ({players, setPlayers}) => {
 
