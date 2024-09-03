@@ -71,23 +71,29 @@ const styles = StyleSheet.create({
   },
 });
 
-// function shuffle(array) {
-//   var currentIndex = array.length,  randomIndex;
+function shuffle(array, seed) {
+  var currentIndex = array.length,  randomIndex;
 
-//   // While there remain elements to shuffle.
-//   while (currentIndex > 0) {
+  // While there remain elements to shuffle.
+  while (currentIndex > 0) {
 
-//     // Pick a remaining element.
-//     randomIndex = Math.floor(Math.random() * currentIndex);
-//     currentIndex--;
+    // Pick a remaining element.
+    randomIndex = Math.floor(random(seed) * currentIndex);
+    currentIndex--;
 
-//     // And swap it with the current element.
-//     [array[currentIndex], array[randomIndex]] = [
-//       array[randomIndex], array[currentIndex]];
-//   }
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+    ++seed;
+  }
 
-//   return array;
-// }
+  return array;
+}
+
+function random(seed) {
+  var x = Math.sin(seed++) * 10000; 
+  return x - Math.floor(x);
+}
 
 const fair_games = {
   9: [['a', 'b', 'c', 'd'], ['e', 'f', 'a', 'g'], ['h', 'i', 'e', 'b'], ['c', 'd', 'h', 'f'], ['g', 'a', 'c', 'i'], ['b', 'e', 'g', 'd'], ['f', 'h', 'b', 'a'], ['i', 'c', 'f', 'e'], ['d', 'g', 'i', 'h']],
@@ -215,8 +221,11 @@ const Game = () => {
     if(!players || players.length < 5)
       return;
 
-    var shuffled_players = players //shuffle(players)
-    shuffled_players.sort()
+    var currentDate = Date.now()
+    var roundedDate = currentDate - (currentDate % ((1000 * 60 * 60 * 24 * 7)))
+
+    var shuffled_players = shuffle(players, roundedDate)
+    //shuffled_players.sort()
     const player_map = Object.fromEntries(
       placeholder_names.map((key, index) => [key, shuffled_players[index]]),
     );
